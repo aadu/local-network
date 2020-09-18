@@ -3,24 +3,26 @@ version: "3"
 # More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
 services:
   pihole:
-    container_name: pihole
     image: pihole/pihole:latest
+    # network_mode: host
     ports:
       - "53:53/tcp"
       - "53:53/udp"
       - "67:67/udp"
       - "80:80/tcp"
       - "443:443/tcp"
-    network_mode: host
     environment:
-      TZ: 'US/Pacific'
-      # WEBPASSWORD: 'set a secure password here or it will be random'
-    # Volumes store your data between container upgrades
+        TZ: 'US/Pacific'
+        WEBPASSWORD: 'not-my-password' #Your Password Goes Here
+        ServerIP: '192.168.87.30' #Your Server IP Goes Here
     volumes:
-      - '/srv/dev-disk-by-id-md-name-raspberrypi-0/etc-pihole/:/etc/pihole/'
-      - '/srv/dev-disk-by-id-md-name-raspberrypi-0/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+        - '/srv/dev-disk-by-id-md-name-raspberrypi-0/etc-pihole/:/etc/pihole/'
+        - '/srv/dev-disk-by-id-md-name-raspberrypi-0/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+    dns:
+        - 127.0.0.1
+        - 1.1.1.1
     # Recommended but not required (DHCP needs NET_ADMIN)
-    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    # https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
     cap_add:
-      - NET_ADMIN
+        - NET_ADMIN
     restart: unless-stopped
